@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Security Scanner | Cyber Shield</title>
+
+    <style>
+        body {
+            background: #0f172a;
+            color: white;
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 500px;
+            margin: auto;
+            background: #1e293b;
+            padding: 30px;
+            border-radius: 15px;
+        }
+
+        textarea {
+            width: 95%;
+            height: 100px;
+            padding: 10px;
+            box-sizing: border-box;
+            border-radius: 8px;
+        }
+
+        button {
+            margin-top: 15px;
+            padding: 12px 20px;
+            background: #38bdf8;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        #result {
+            margin-top: 20px;
+            line-height: 1.8;
+            overflow-wrap: anywhere;
+        }
+
+        a {
+            color: #38bdf8;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>🛡️ Security Scanner</h1>
+        <p>Check text for a few common security warning signs.</p>
+
+        <textarea id="scanText"
+            placeholder="Enter sample text to scan"></textarea>
+
+        <br>
+        <button onclick="scanText()">Scan Text</button>
+
+        <div id="result"></div>
+
+        <p><a href="/">← Back to Home</a></p>
+    </div>
+
+    <script>
+        function scanText() {
+            const text = document.getElementById("scanText").value;
+            const result = document.getElementById("result");
+
+            if (!text.trim()) {
+                result.textContent = "Please enter sample text first.";
+                return;
+            }
+
+            const warnings = [];
+
+            if (/<script\b/i.test(text)) {
+                warnings.push("Script tag detected.");
+            }
+
+            if (/javascript\s*:/i.test(text)) {
+                warnings.push("JavaScript URL pattern detected.");
+            }
+
+            if (/eval\s*\(/i.test(text)) {
+                warnings.push("Eval function pattern detected.");
+            }
+
+            if (warnings.length > 0) {
+                result.textContent =
+                    "⚠️ Warning signs found: " + warnings.join(" ");
+            } else {
+                result.textContent =
+                    "No configured warning patterns detected.";
+            }
+        }
+    </script>
+</body>
+</html>

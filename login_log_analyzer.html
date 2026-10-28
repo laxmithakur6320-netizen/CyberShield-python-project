@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Log Analyzer | Cyber Shield</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #0f172a;
+            color: white;
+            padding: 30px;
+        }
+        .container {
+            max-width: 650px;
+            margin: auto;
+            background: #1e293b;
+            padding: 25px;
+            border-radius: 12px;
+        }
+        textarea {
+            width: 100%;
+            height: 160px;
+            box-sizing: border-box;
+            padding: 12px;
+            border-radius: 8px;
+            margin: 12px 0;
+        }
+        button {
+            padding: 12px 18px;
+            background: #38bdf8;
+            border: none;
+            border-radius: 7px;
+            cursor: pointer;
+        }
+        #result {
+            margin-top: 20px;
+            white-space: pre-wrap;
+            line-height: 1.8;
+        }
+        a { color: #38bdf8; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Login Log Analyzer</h1>
+        <p>Analyze sample login logs to identify successful and failed attempts.</p>
+
+        <textarea id="logs" placeholder="Paste sample logs here..."></textarea>
+        <button onclick="analyzeLogs()">Analyze Logs</button>
+
+        <div id="result"></div>
+        <p><a href="/">← Back to Home</a></p>
+    </div>
+
+    <script>
+        function analyzeLogs() {
+            const logs = document.getElementById("logs").value.trim();
+            const result = document.getElementById("result");
+
+            if (!logs) {
+                result.textContent = "Please enter some sample login logs.";
+                return;
+            }
+
+            const lines = logs.split(/\r?\n/);
+            let success = 0;
+            let failed = 0;
+
+            lines.forEach(line => {
+                if (/failed|failure|invalid password/i.test(line)) {
+                    failed++;
+                } else if (/success|successful|logged in/i.test(line)) {
+                    success++;
+                }
+            });
+
+            result.textContent =
+                "Analysis Results\n" +
+                "Total lines: " + lines.length + "\n" +
+                "Successful login entries: " + success + "\n" +
+                "Failed login entries: " + failed + "\n\n" +
+                (failed >= 3
+                    ? "Notice: Multiple failed-login entries found. Review the logs."
+                    : "Review the results and check any unusual entries.");
+
+            if (success === 0 && failed === 0) {
+                result.textContent +=
+                    "\nNo recognizable login statuses were found.";
+            }
+        }
+    </script>
+</body>
+</html>
